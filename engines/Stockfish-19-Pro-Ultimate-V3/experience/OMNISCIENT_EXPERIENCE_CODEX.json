@@ -1,0 +1,218 @@
+{
+  "summary": {
+    "version": "Stockfish 19 Pro — V7.5 Omniscient Singularity Edition",
+    "elapsed_seconds": 8.97,
+    "elapsed_formatted": "00:00:08",
+    "initial_experience_entries": 2768,
+    "final_experience_entries": 3032,
+    "net_new_or_upgraded_entries": 264,
+    "experience_bin_bytes": 72784,
+    "experience_bin_sha256": "7b1cedb71eed3a41895d0b629e38aa0b6988fa9b7b1b1fc7293dcfb48a979831",
+    "total_games": 4,
+    "crucible_games": 3,
+    "crucible_pro_wins": 2,
+    "crucible_draws": 0,
+    "crucible_sparring_wins": 1,
+    "selfplay_games": 1,
+    "kill_chains_harvested": 3,
+    "post_mortem_surgeries_solved": 8
+  },
+  "layer_1_position_experience": {
+    "format": "SF19EXP2 (24-byte Zobrist + Move + Score + TD_Score + Depth + WinPerf + Games + FNV1a)",
+    "total_positions_and_moves": 3032,
+    "opening_mastery_ledger": {
+      "Sicilian Defense: Najdorf English Attack": {
+        "games": 1,
+        "wins": 0,
+        "draws": 0,
+        "losses": 1,
+        "surgeries": 0
+      },
+      "Sicilian Defense: Najdorf Poisoned Pawn": {
+        "games": 1,
+        "wins": 1,
+        "draws": 0,
+        "losses": 0,
+        "surgeries": 4
+      },
+      "Sicilian Defense: Dragon Yugoslav Attack": {
+        "games": 1,
+        "wins": 0,
+        "draws": 1,
+        "losses": 0,
+        "surgeries": 0
+      },
+      "Sicilian Defense: Sveshnikov Sharp": {
+        "games": 1,
+        "wins": 1,
+        "draws": 0,
+        "losses": 0,
+        "surgeries": 4
+      }
+    }
+  },
+  "layer_2_meta_learning_how_to_learn": {
+    "algorithm": "Contextual Evolutionary Bandit (Cross-Entropy + Thompson Sampling)",
+    "evolved_parameters": {
+      "tdLambdaDecayPermille": 944,
+      "tdBlendTrajectoryWeight": 57,
+      "winRewardBoost": 336,
+      "lossPenaltyMagnitude": 340,
+      "drawStagnationPenalty": 22,
+      "pvHarvestMaxHorizon": 5,
+      "killerBookEvalMargin": 54,
+      "standardBookEvalMargin": 30,
+      "rootHistoryKillerBoost": 976,
+      "lookaheadHorizonBoost1": 489,
+      "lookaheadHorizonBoost2": 464,
+      "refutedMoveHistoryPenalty": -960,
+      "inTreeTtInjectMinPerf": 175,
+      "openingOptimismSkew": 4,
+      "middlegameOptimismSkew": 8,
+      "endgameOptimismSkew": 4,
+      "winningContemptPress": 19,
+      "defendingContemptBailout": -15,
+      "overdriveHeavyMaterialMul": 3465,
+      "overdriveTacticalSwingMul": 2568,
+      "complexTensionBonus": 6,
+      "initiativeMomentumStep": 3,
+      "maxAdaptiveMomentum": 11
+    },
+    "evolution_log": [
+      {
+        "episodes": 4,
+        "avg_elite_fitness": 2.0157,
+        "evolved_genome": {
+          "tdLambdaDecayPermille": 944,
+          "tdBlendTrajectoryWeight": 57,
+          "winRewardBoost": 336,
+          "lossPenaltyMagnitude": 340,
+          "drawStagnationPenalty": 22,
+          "pvHarvestMaxHorizon": 5,
+          "killerBookEvalMargin": 54,
+          "standardBookEvalMargin": 30,
+          "rootHistoryKillerBoost": 976,
+          "lookaheadHorizonBoost1": 489,
+          "lookaheadHorizonBoost2": 464,
+          "refutedMoveHistoryPenalty": -960,
+          "inTreeTtInjectMinPerf": 175,
+          "openingOptimismSkew": 4,
+          "middlegameOptimismSkew": 8,
+          "endgameOptimismSkew": 4,
+          "winningContemptPress": 19,
+          "defendingContemptBailout": -15,
+          "overdriveHeavyMaterialMul": 3465,
+          "overdriveTacticalSwingMul": 2568,
+          "complexTensionBonus": 6,
+          "initiativeMomentumStep": 3,
+          "maxAdaptiveMomentum": 11
+        }
+      }
+    ]
+  },
+  "layer_3_tactical_motifs_and_post_mortem": {
+    "motif_distribution": {
+      "Endgame_Precision_Conversion (Chuyển hóa ưu thế & phá pháo đài tàn cuộc)": 3,
+      "Central_Tension_Counterstrike (Phản kích giành quyền chủ động trung cuộc)": 3,
+      "Middlegame_King_Storm_Breakthrough (Đột phá công thành & xé toạc trung tâm)": 2
+    },
+    "deep_surgical_refutations": [
+      {
+        "game": 1,
+        "opening": "Sicilian Defense: Najdorf Poisoned Pawn",
+        "ply": 95,
+        "side": "B",
+        "blunder_swing_cp": 76,
+        "surgical_bestmove": "h7g8",
+        "surgical_score_cp": -320,
+        "surgical_depth": 8,
+        "surgical_pv": "h7g8 e2f3 e1e5 h5h4 g7g5 h4h3",
+        "motif": "Endgame_Precision_Conversion (Chuyển hóa ưu thế & phá pháo đài tàn cuộc)"
+      },
+      {
+        "game": 1,
+        "opening": "Sicilian Defense: Najdorf Poisoned Pawn",
+        "ply": 70,
+        "side": "W",
+        "blunder_swing_cp": 67,
+        "surgical_bestmove": "h5e8",
+        "surgical_score_cp": 154,
+        "surgical_depth": 8,
+        "surgical_pv": "h5e8 g8h7 e8c8 h4h3 c8e8 g7g2",
+        "motif": "Central_Tension_Counterstrike (Phản kích giành quyền chủ động trung cuộc)"
+      },
+      {
+        "game": 1,
+        "opening": "Sicilian Defense: Najdorf Poisoned Pawn",
+        "ply": 69,
+        "side": "B",
+        "blunder_swing_cp": 58,
+        "surgical_bestmove": "h7g8",
+        "surgical_score_cp": -181,
+        "surgical_depth": 8,
+        "surgical_pv": "h7g8 h5e8 g8h7 e8c8 h4h3 c8f8",
+        "motif": "Central_Tension_Counterstrike (Phản kích giành quyền chủ động trung cuộc)"
+      },
+      {
+        "game": 1,
+        "opening": "Sicilian Defense: Najdorf Poisoned Pawn",
+        "ply": 78,
+        "side": "W",
+        "blunder_swing_cp": 53,
+        "surgical_bestmove": "c8f8",
+        "surgical_score_cp": 162,
+        "surgical_depth": 8,
+        "surgical_pv": "c8f8 h1g1 f8f6 g7g2 f2f3 h3h2",
+        "motif": "Endgame_Precision_Conversion (Chuyển hóa ưu thế & phá pháo đài tàn cuộc)"
+      },
+      {
+        "game": 4,
+        "opening": "Sicilian Defense: Sveshnikov Sharp",
+        "ply": 37,
+        "side": "B",
+        "blunder_swing_cp": 175,
+        "surgical_bestmove": "b2a3",
+        "surgical_score_cp": 209,
+        "surgical_depth": 8,
+        "surgical_pv": "b2a3 a8a7 e7d8 a7b8 f5c8 b8b6",
+        "motif": "Middlegame_King_Storm_Breakthrough (Đột phá công thành & xé toạc trung tâm)"
+      },
+      {
+        "game": 4,
+        "opening": "Sicilian Defense: Sveshnikov Sharp",
+        "ply": 36,
+        "side": "W",
+        "blunder_swing_cp": 139,
+        "surgical_bestmove": "a1e1",
+        "surgical_score_cp": -203,
+        "surgical_depth": 8,
+        "surgical_pv": "a1e1 b2a3 a8a7 e7d8 a7b8 f5c8",
+        "motif": "Middlegame_King_Storm_Breakthrough (Đột phá công thành & xé toạc trung tâm)"
+      },
+      {
+        "game": 4,
+        "opening": "Sicilian Defense: Sveshnikov Sharp",
+        "ply": 94,
+        "side": "W",
+        "blunder_swing_cp": 112,
+        "surgical_bestmove": "a5a6",
+        "surgical_score_cp": -204,
+        "surgical_depth": 8,
+        "surgical_pv": "a5a6 d3d2 a6a7 b2a2 a1a2 d2d1q",
+        "motif": "Endgame_Precision_Conversion (Chuyển hóa ưu thế & phá pháo đài tàn cuộc)"
+      },
+      {
+        "game": 4,
+        "opening": "Sicilian Defense: Sveshnikov Sharp",
+        "ply": 40,
+        "side": "W",
+        "blunder_swing_cp": 51,
+        "surgical_bestmove": "h2h4",
+        "surgical_score_cp": -41,
+        "surgical_depth": 8,
+        "surgical_pv": "h2h4 g8g4 h1h3 g4f4 c4e2 d4e2",
+        "motif": "Central_Tension_Counterstrike (Phản kích giành quyền chủ động trung cuộc)"
+      }
+    ]
+  }
+}

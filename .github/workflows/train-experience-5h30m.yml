@@ -1,0 +1,111 @@
+name: Stockfish 19 Pro - 5h30m Omniscient Experience & Meta-Learning Dojo
+
+on:
+  workflow_dispatch:
+    inputs:
+      duration_minutes:
+        description: "Thời gian rèn luyện liên tục (phút) — Mặc định 330 phút (5h30p)"
+        required: false
+        default: "330"
+      parallel_boards:
+        description: "Số bàn cờ va chạm song song cùng lúc (Multi-Board Collisions)"
+        required: false
+        default: "4"
+      threads_per_engine:
+        description: "Số luồng CPU cho mỗi Engine trong 1 bàn"
+        required: false
+        default: "1"
+      move_time_ms:
+        description: "Thời gian suy nghĩ mỗi nước (ms) trong ván va chạm"
+        required: false
+        default: "120"
+      post_mortem_depth:
+        description: "Độ sâu Giải Phẫu Hậu Chiến (Post-Mortem Surgery Depth) cho các thế cờ bước ngoặt"
+        required: false
+        default: "18"
+      training_mode:
+        description: "Chế độ va chạm (hybrid_all = Đối kháng + Tự phân cực + Giải phẫu + Meta-Learning)"
+        required: false
+        default: "hybrid_all"
+      gdrive_file_id:
+        description: "Google Drive File ID của bản chạy chuẩn (Mặc định: 1PdgGTXNhHOwZy_39nmc4C0vmlyaF6EJO)"
+        required: false
+        default: "1PdgGTXNhHOwZy_39nmc4C0vmlyaF6EJO"
+
+jobs:
+  forge-omniscient-experience:
+    name: "Lò Luyện Kinh Nghiệm Đa Tầng 5h30p (Omniscient Dojo)"
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 355
+
+    steps:
+      - name: "1. Checkout Repository"
+        uses: actions/checkout@v4
+
+      - name: "2. Cài đặt Công cụ Biên dịch & Tải Bản Chuẩn từ Google Drive"
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y build-essential clang lld llvm curl wget git python3 python3-pip zip unzip tar gzip file binutils
+          python3 -m pip install --upgrade pip gdown --break-system-packages || python3 -m pip install gdown || true
+          chmod +x scripts/setup_and_build_dojo.sh scripts/forge_experience_5h30m.py
+          ./scripts/setup_and_build_dojo.sh "${{ inputs.gdrive_file_id || '1PdgGTXNhHOwZy_39nmc4C0vmlyaF6EJO' }}"
+
+      - name: "3. Chạy Lò Luyện Đa Tầng 5h30p (TD-Lambda + Meta-Learning + Post-Mortem + Auto-Package)"
+        run: |
+          python3 scripts/forge_experience_5h30m.py \
+            --pro-bin "./build/bin/stockfish-pro" \
+            --sparring-bin "./build/bin/stockfish-sparring" \
+            --seed-exp "./build/seed_experience.bin" \
+            --output-dir "./results" \
+            --engine-src-dir "./build/pro_root" \
+            --duration-minutes "${{ inputs.duration_minutes || '330' }}" \
+            --concurrency "${{ inputs.parallel_boards || '4' }}" \
+            --threads "${{ inputs.threads_per_engine || '1' }}" \
+            --move-time-ms "${{ inputs.move_time_ms || '120' }}" \
+            --post-mortem-depth "${{ inputs.post_mortem_depth || '18' }}" \
+            --mode "${{ inputs.training_mode || 'hybrid_all' }}"
+
+      - name: "4. Biên dịch lại Engine từ Bộ Gen & Kho Kinh Nghiệm Đã Tiến Hóa + Đóng Gói Toàn Diện"
+        if: always()
+        run: |
+          if [ -d "./build/pro_root/src" ] && [ -f "./results/learned_genome.h" ]; then
+            echo ">>> Dang bien dich lai Stockfish 19 Pro voi Bo Gen Tu Duy & Kho Kinh Nghiem moi nhat..."
+            cp -f ./results/learned_genome.h ./build/pro_root/src/learned_genome.h
+            cp -f ./results/experience.bin ./build/pro_root/experience/experience.bin 2>/dev/null || true
+            ARCH_HOST=$(uname -m)
+            if [ "$ARCH_HOST" = "aarch64" ] || [ "$ARCH_HOST" = "arm64" ]; then
+              TARGET_ARCH="armv8-dotprod"
+            else
+              TARGET_ARCH="x86-64-avx2"
+            fi
+            make -C ./build/pro_root/src clean || true
+            make -C ./build/pro_root/src -j$(nproc) build ARCH="$TARGET_ARCH" COMP=clang || make -C ./build/pro_root/src -j$(nproc) build ARCH="$TARGET_ARCH" COMP=gcc
+            cp -f ./build/pro_root/src/stockfish ./results/stockfish-19-pro-evolved-native
+            chmod +x ./results/stockfish-19-pro-evolved-native
+            make -C ./build/pro_root/src clean || true
+            rm -f ./build/pro_root/src/nn-1a298aa575a0.nnue ./build/pro_root/benchmark/nn-1a298aa575a0.nnue ./build/pro_root/baseline_src/nn-1a298aa575a0.nnue
+            tar -czf ./results/Stockfish-19-Pro-Ultimate-V3.tar.gz -C ./build pro_root --transform 's/^pro_root/Stockfish-19-Pro-Ultimate-V3/' 2>/dev/null || \
+              tar -czf ./results/Stockfish-19-Pro-Ultimate-V3.tar.gz -C ./build pro_root
+          fi
+          ls -lh ./results/
+          cat ./results/TRAINING_REPORT.md || true
+
+      - name: "5. Xuất Gói Toàn Thư Kinh Nghiệm & Engine Đã Tiến Hóa (Artifact Upload)"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Stockfish-Pro-Supreme-Experience-Bundle
+          path: |
+            results/Stockfish-19-Pro-Ultimate-V3.tar.gz
+            results/stockfish-19-pro-evolved-native
+            results/experience.bin
+            results/embedded_experience_blob.h
+            results/learned_genome.h
+            results/learned_genome.json
+            results/OMNISCIENT_EXPERIENCE_CODEX.json
+            results/termux_inject_forged_experience.sh
+            results/TRAINING_REPORT.md
+            results/training_summary.json
+            results/critical_positions_solved.json
+            results/all_forged_games.pgn
+          retention-days: 30
